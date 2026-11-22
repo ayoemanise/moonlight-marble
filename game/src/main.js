@@ -25,13 +25,15 @@ fitCanvas();
 
 const input = new Input(canvas);
 const game = new Game(input);
+window.__game = game; // the shot rig and debugging reach the night from here
+window.addEventListener('error', (e) => { document.title = 'ERR: ' + e.message; });
 
 let last = performance.now();
 function frame(now) {
   const dt = Math.min(0.05, (now - last) / 1000);
   last = now;
   game.update(dt);
-  drawGame(ctx, game);
+  if (game.def) drawGame(ctx, game);
   drawHud(ctx, game);
   if (status) status.textContent = game.state === 'playing'
     ? `${game.def.name}: ${game.objectiveText()} alarm ${Math.round(game.alarm.value)} of 100`

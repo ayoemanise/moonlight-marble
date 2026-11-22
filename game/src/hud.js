@@ -5,8 +5,10 @@
 import { W, H, HUD_H, PAL, TUNING as T, TOOLS } from './config.js';
 
 const KEY_LABEL = { q: 'Q', e: 'E', s: 'S' };
+const KEY_KIND = { q: 'decoy', e: 'emp', s: 'smoke' };
 
 export function drawHud(ctx, game) {
+  if (!game.def) { drawTitle(ctx, game); return; } // before the first room loads
   drawBrassStrip(ctx, game);
   drawAlarmDial(ctx, game);
   drawToolBelt(ctx, game);
@@ -78,7 +80,7 @@ function drawToolBelt(ctx, game) {
   let x = W - 150;
   ctx.font = '600 13px Georgia, serif';
   for (const tool of TOOLS) {
-    const n = belt[tool.key];
+    const n = belt[KEY_KIND[tool.key]];
     const has = n > 0;
     ctx.fillStyle = has ? PAL.gold : 'rgba(212,168,67,0.3)';
     ctx.beginPath(); ctx.arc(x + 12, HUD_H / 2, 13, 0, Math.PI * 2); ctx.fill();
